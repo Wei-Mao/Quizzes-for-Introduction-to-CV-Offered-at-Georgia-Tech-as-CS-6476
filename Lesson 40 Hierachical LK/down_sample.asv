@@ -1,0 +1,35 @@
+clc,clear,close all
+img = imread("penny-farthing.png");
+% img = im2double(img)
+figure, imshow(img, []), title('Original Image');
+
+img_d = downsample(img);   % 1/2 size
+img_d = downsample(img_d); % 1/4 size
+img_d = downsample(img_d); % 1/8 size
+
+img_bd = blur_downsample(img);   % 1/2 size
+img_bd = blur_downsample(img_bd); % 1/4 size
+img_bd = blur_downsample(img_bd); % 1/8 size
+
+figure, imshow(imresize(img_d, size(img))), title('down sampling w/o blur'); % viewing downsampled image in orginal size
+figure, imshow(imresize(img_bd, size(img))), title('down sampling after smoothing');
+figure, imshow(imresize(img_d, size(img), 'nearest')), title('down sampling w/o blur'); % viewing downsampled image in orginal size
+figure, imshow(imresize(img_bd, size(img), 'nearest')), title('down sampling after smoothing'); % 'nearest no interpolation'
+function img_d = downsample(img)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% down_sample the input image to half its size
+% by throwing awary every other row and column
+% input: img 
+% output: img_d half size of img
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+img_d = img(1:2:end, 1:2:end);
+end
+
+function img_bd = blur_downsample(img)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% blur by 5 by 5 gaussian , then downsample
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+gaussian_filter = fspecial('gaussian', [5 5]);
+img_b = imfilter(img, gaussian_filter);
+img_bd = downsample(img_b);
+end

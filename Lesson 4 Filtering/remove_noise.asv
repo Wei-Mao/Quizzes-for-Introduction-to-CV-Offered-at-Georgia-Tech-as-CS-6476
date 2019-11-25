@@ -1,0 +1,19 @@
+% Remove noise with a Gaussian Filter
+clc,clear,close all
+%% Load an image
+img = imread('saturn.png');
+img = im2double(img);
+figure
+imshow(img)
+
+%% Add some noise
+noise_sigma = 25;  % 1 D dimensional Normally 
+noise = randn(size(img)).* noise_sigma;
+noisy_img = img + noise;
+figure
+imshow(noisy_img)
+
+%% Create a Gaussian Filter
+filter_size = 11;
+filter_sigma = 2;
+gaussian_filter = fspecial('gaussian', filter_size, filter_sigma);
